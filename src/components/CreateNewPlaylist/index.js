@@ -12,6 +12,7 @@ class CreateNewPLaylist extends React.Component {
     }
 
     handleNameInputChange = (event) => {
+        console.log(event.target.value)
         this.setState({
             newPlaylistName: event.target.value
         })
