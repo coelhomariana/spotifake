@@ -24,7 +24,9 @@ const PlaylistsList = (props) => {
             {mockPlaylistList.map((playlist) => {
                 return (
                     <ListItem key={playlist.id}>
-                        <ListItemText primary={playlist.name} />
+                        <ListItemText primary={playlist.name}
+                            onClick={() => props.onPlaylistClick(playlist.id, playlist.name)}
+                        />
                         <ListItemSecondaryAction>
                             <IconButton aria-label="delete">
                                 <DeleteIcon />
