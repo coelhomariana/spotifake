@@ -4,7 +4,6 @@ import CreateNewPLaylist from './components/CreateNewPlaylist';
 import AddSongToPlaylist from './components/AddSongToPlaylist';
 import PlaylistsList from './components/PlaylistsList';
 import PlaylistDetail from './components/PlaylistDetail';
-import { createGenerateClassName } from '@material-ui/core';
 
 class App extends React.Component {
   constructor(props) {
@@ -20,7 +19,8 @@ class App extends React.Component {
   handleCurrentPlaylistChange = (playlistId, playlistName) => {
     this.setState({
       currentPage: 'playlistDetails',
-      selectedPlaylistId: playlistId
+      selectedPlaylistId: playlistId,
+      selectedPlaylistName: playlistName
     })
   }
 
@@ -36,8 +36,8 @@ class App extends React.Component {
 
         {this.state.currentPage === 'playlistDetails' && (
           <>
-            <AddSongToPlaylist />
-            <PlaylistDetail />
+            <AddSongToPlaylist playlistId={this.selectedPlaylistId}/>
+            <PlaylistDetail playlistName={this.state.selectedPlaylistName} />
           </>
         )}
       </div>
