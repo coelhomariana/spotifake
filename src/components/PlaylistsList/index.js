@@ -10,7 +10,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import ListWrapper from '../ListWrapper'
 
 class PlaylistsList extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -18,40 +18,29 @@ class PlaylistsList extends React.Component {
         }
     }
 
-    componentDidMount(){
-        const axiosConfig = {
-            headers: {
-                auth: 'mariana'
-            }
-        }
-
-        axios.get('https://us-central1-spotif4.cloudfunctions.net/api/playlists/getAllPlaylists', axiosConfig).then(response => {
-            this.setState({ allPlaylists: response.data.result.list })
-        })
-    }
-
     render() {
         return (
-        <ListWrapper>
-            <List subheader={<ListSubheader>Playlists</ListSubheader>}>
-                {this.state.allPlaylists.map((playlist) => {
-                    return (
-                        <ListItem key={playlist.id}>
-                            <ListItemText primary={playlist.name}
-                                onClick={() => this.props.onPlaylistClick(playlist.id, playlist.name)}
-                            />
-                            <ListItemSecondaryAction>
-                                <IconButton aria-label="delete">
-                                    <DeleteIcon />
-                                </IconButton>
-                            </ListItemSecondaryAction>
-                        </ListItem>
-                    )
-                })}
-            </List>
-        </ListWrapper>
+            <ListWrapper>
+                <List subheader={<ListSubheader>Playlists</ListSubheader>}>
+                    {this.state.allPlaylists.map((playlist) => {
+                        return (
+                            <ListItem key={playlist.id}>
+                                <ListItemText primary={playlist.name}
+                                    onClick={() => this.props.onPlaylistClick(playlist.id, playlist.name)}
+                                />
+                                <ListItemSecondaryAction>
+                                    <IconButton aria-label="delete">
+                                        <DeleteIcon />
+                                    </IconButton>
+                                </ListItemSecondaryAction>
+                            </ListItem>
+                        )
+                    })}
+                </List>
+            </ListWrapper>
 
-    )}
+        )
+    }
 }
 
 export default PlaylistsList;

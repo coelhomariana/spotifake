@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 import axios from 'axios';
 
 class CreateNewPLaylist extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -16,7 +16,7 @@ class CreateNewPLaylist extends React.Component {
         this.setState({ newPlaylistName: event.target.value })
     }
 
-    handleCreatePlaylist = () => {
+    handleCreatePlaylist = async () => {
         const axiosConfig = {
             headers: {
                 auth: "mariana"
@@ -27,16 +27,18 @@ class CreateNewPLaylist extends React.Component {
             name: this.state.newPlaylistName
         }
 
-        const response = axios.post(
+        const response = await axios.post(
             'https://us-central1-spotif4.cloudfunctions.net/api/playlists/createPlaylist',
             body,
             axiosConfig
-            )
+        )
+
+        this.setState({ newPlaylistName: '' })
+        alert('Playlist criada com sucesso!')
     }
 
-    render(){
-        
-        return(
+    render() {
+        return (
             <div>
                 <TextField
                     type="text"

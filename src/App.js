@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import axios from 'axios';
 import CreateNewPLaylist from './components/CreateNewPlaylist';
 import AddSongToPlaylist from './components/AddSongToPlaylist';
 import PlaylistsList from './components/PlaylistsList';
@@ -13,8 +14,21 @@ class App extends React.Component {
       currentPage: 'ListAndCreate',
       selectedPlaylistId: undefined,
       selectedPlaylistName: undefined,
+      allPlaylists: []
     }
   }
+  
+  componentDidMount(){
+    const axiosConfig = {
+        headers: {
+            auth: 'mariana'
+        }
+    }
+
+    axios.get('https://us-central1-spotif4.cloudfunctions.net/api/playlists/getAllPlaylists', axiosConfig).then(response => {
+        this.setState({ allPlaylists: response.data.result.list })
+    })
+}
 
   handleCurrentPlaylistChange = (playlistId, playlistName) => {
     this.setState({
@@ -30,13 +44,13 @@ class App extends React.Component {
         {this.state.currentPage === 'ListAndCreate' && (
           <>
             <CreateNewPLaylist />
-            <PlaylistsList onPlaylistClick={this.handleCurrentPlaylistChange}/>
+            <PlaylistsList onPlaylistClick={this.handleCurrentPlaylistChange} />
           </>
         )}
 
         {this.state.currentPage === 'playlistDetails' && (
           <>
-            <AddSongToPlaylist playlistId={this.selectedPlaylistId}/>
+            <AddSongToPlaylist playlistId={this.selectedPlaylistId} />
             <PlaylistDetail playlistName={this.state.selectedPlaylistName} />
           </>
         )}
