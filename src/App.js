@@ -17,18 +17,22 @@ class App extends React.Component {
       allPlaylists: []
     }
   }
-  
-  componentDidMount(){
+
+  fetchAllPlaylists = () => {
     const axiosConfig = {
-        headers: {
-            auth: 'mariana'
-        }
+      headers: {
+        auth: 'mariana'
+      }
     }
 
     axios.get('https://us-central1-spotif4.cloudfunctions.net/api/playlists/getAllPlaylists', axiosConfig).then(response => {
-        this.setState({ allPlaylists: response.data.result.list })
+      this.setState({ allPlaylists: response.data.result.list })
     })
-}
+  }
+
+  componentDidMount() {
+    this.fetchAllPlaylists();
+  }
 
   handleCurrentPlaylistChange = (playlistId, playlistName) => {
     this.setState({
@@ -43,8 +47,11 @@ class App extends React.Component {
       <div>
         {this.state.currentPage === 'ListAndCreate' && (
           <>
-            <CreateNewPLaylist />
-            <PlaylistsList onPlaylistClick={this.handleCurrentPlaylistChange} />
+            <CreateNewPLaylist refreshPlaylists={this.fetchAllPlaylists} />
+            <PlaylistsList
+              allPlaylists={this.state.allPlaylists}
+              refreshPlaylists={this.fetchAllPlaylists}
+              onPlaylistClick={this.handleCurrentPlaylistChange} />
           </>
         )}
 

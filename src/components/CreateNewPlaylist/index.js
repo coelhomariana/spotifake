@@ -27,7 +27,7 @@ class CreateNewPLaylist extends React.Component {
             name: this.state.newPlaylistName
         }
 
-        const response = await axios.post(
+        await axios.post(
             'https://us-central1-spotif4.cloudfunctions.net/api/playlists/createPlaylist',
             body,
             axiosConfig
@@ -35,6 +35,7 @@ class CreateNewPLaylist extends React.Component {
 
         this.setState({ newPlaylistName: '' })
         alert('Playlist criada com sucesso!')
+        this.props.refreshPlaylists();
     }
 
     render() {

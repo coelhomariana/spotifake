@@ -10,11 +10,17 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import ListWrapper from '../ListWrapper'
 
 class PlaylistsList extends React.Component {
-    constructor(props) {
-        super(props);
 
-        this.state = {
-            allPlaylists: []
+    handlePlaylistDeletion = async (playlistId) => {
+        const axiosConfig = {
+            headers: {
+                auth: "mariana"
+            }
+        }
+
+        if (window.confirm('Tem certeza que deseja deletar a playlist?')) {
+            await axios.delete(`https://us-central1-spotif4.cloudfunctions.net/api/playlists/deletePlaylist?playlistId=${playlistId}`, axiosConfig)
+            this.props.refreshPlaylists();
         }
     }
 
@@ -22,14 +28,14 @@ class PlaylistsList extends React.Component {
         return (
             <ListWrapper>
                 <List subheader={<ListSubheader>Playlists</ListSubheader>}>
-                    {this.state.allPlaylists.map((playlist) => {
+                    {this.props.allPlaylists.map((playlist) => {
                         return (
                             <ListItem key={playlist.id}>
                                 <ListItemText primary={playlist.name}
                                     onClick={() => this.props.onPlaylistClick(playlist.id, playlist.name)}
                                 />
                                 <ListItemSecondaryAction>
-                                    <IconButton aria-label="delete">
+                                    <IconButton aria-label="delete" onClick={() => this.handlePlaylistDeletion(playlist.id)}>
                                         <DeleteIcon />
                                     </IconButton>
                                 </ListItemSecondaryAction>
