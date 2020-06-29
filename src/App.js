@@ -14,7 +14,8 @@ class App extends React.Component {
       currentPage: 'ListAndCreate',
       selectedPlaylistId: undefined,
       selectedPlaylistName: undefined,
-      allPlaylists: []
+      allPlaylists: [],
+      selectedPlaylistSongs: []
     }
   }
 
@@ -30,11 +31,26 @@ class App extends React.Component {
     })
   }
 
+  fetchAllPlaylistSongs = async () => {
+    const axiosConfig = {
+      headers: {
+        auth: "mariana"
+      }
+    }
+    const response = await axios.get(`https://us-central1-spotif4.cloudfunctions.net/api/playlists/getPlaylistMusics/${this.props.playlistId}`, axiosConfig)
+
+    this.setState({
+      musics: response.data.result.musics
+    })
+  }
+
   componentDidMount() {
     this.fetchAllPlaylists();
   }
 
   handleCurrentPlaylistChange = (playlistId, playlistName) => {
+    this.fetchAllPlaylistSongs(playlistId)
+
     this.setState({
       currentPage: 'playlistDetails',
       selectedPlaylistId: playlistId,
@@ -48,6 +64,7 @@ class App extends React.Component {
         {this.state.currentPage === 'ListAndCreate' && (
           <>
             <CreateNewPLaylist refreshPlaylists={this.fetchAllPlaylists} />
+
             <PlaylistsList
               allPlaylists={this.state.allPlaylists}
               refreshPlaylists={this.fetchAllPlaylists}
@@ -57,8 +74,15 @@ class App extends React.Component {
 
         {this.state.currentPage === 'playlistDetails' && (
           <>
-            <AddSongToPlaylist playlistId={this.selectedPlaylistId} />
-            <PlaylistDetail playlistName={this.state.selectedPlaylistName} />
+            <AddSongToPlaylist
+              playlistId={this.selectedPlaylistId}
+              refreshPlaylistSongs={() => this.fetchAllPlaylistSongs(this.state.playlistId)}
+            />
+
+            <PlaylistDetail
+              playlistId={this.state.playlistId}
+              playlistName={this.state.selectedPlaylistName}
+              musics={this.state.selectedPlaylistSongs} />
           </>
         )}
       </div>
